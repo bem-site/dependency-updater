@@ -1,0 +1,50 @@
+{
+  "name": "dependency-updater",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bem-site/dependency-updater.git"
+  },
+  "author": "Andrey Kuznetsov <andrey.kuznetsov48@yandex.ua> (http://github.com/tormozz48)",
+  "maintainers": [
+    "Andrey Kuznetsov <andrey.kuznetsov48@yandex.ua> (http://github.com/tormozz48)"
+  ],
+  "contributors": [
+    "Andrey Kuznetsov <andrey.kuznetsov48@yandex.ua> (http://github.com/tormozz48)",
+    "Nikolay Ilchenko <tavria@yandex-team.ru> (http://github.com/tavriaforever)",
+    "Gela Konstantinova <gela-d@yandex-team.ru> (http://github.com/gela-d)"
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "bem-site-logger": "^0.0.x",
+    "cron-runner": "^0.1.0",
+    "forever": "^0.14.x",
+    "fs-extra": "^0.18.x",
+    "inherit": "^2.2.x",
+    "lodash": "^3.1.x",
+    "npm": "2.11.x",
+    "vow": "~0.4.x",
+    "vow-node": "^0.2.x"
+  },
+  "devDependencies": {
+    "mocha": "~2.2.x",
+    "mocha-lcov-reporter": "0.0.x",
+    "should": "~5.2.x",
+    "istanbul": "^0.3.x",
+    "jshint": "~2.6.x",
+    "jscs": "^1.11.x"
+  },
+  "scripts": {
+    "jshint": "node_modules/.bin/jshint .",
+    "jscs": "node_modules/.bin/jscs -c .jscs.js .",
+    "codestyle": "npm run jshint && npm run jscs",
+    "config": "cp config/config.json config/_config.json",
+    "codestyle": "node_modules/.bin/jshint . && node_modules/.bin/jscs -c .jscs.js .",
+    "pretest": "npm run codestyle",
+    "test": "NODE_ENV=testing ./node_modules/.bin/istanbul cover _mocha"
+  },
+  "readmeFilename": "README.md",
+  "license": "MPL-2.0"
+}
