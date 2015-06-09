@@ -1,0 +1,9 @@
+{
+  "servicesPaths": [],
+  "updateScript": "",
+  "dependencyName": "",
+  "cron": {
+    "pattern": "0 0 */1 * * *"
+  },
+  "logger": {}
+}
