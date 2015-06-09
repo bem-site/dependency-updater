@@ -1,5 +1,5 @@
 {
-  "servicesPaths": [],
+  "appFolders": [],
   "updateScript": "",
   "dependencyName": "",
   "cron": {
