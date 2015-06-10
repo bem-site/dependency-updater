@@ -90,19 +90,28 @@ describe('lib/updater', function () {
         });
 
         describe('_getRemoteVersion', function () {
-            it('should return valid version of package via npm API', function (done) {
+            it('should return last version of package via npm API (without local version)', function (done) {
                 du._getLastVersionFromNpm('bse-admin').then(function (version) {
+                    version.match(/\d{1,2}\.\d{1,2}\.\d{1,2}/).should.be.ok;
+                    done();
+                });
+            });
+
+            it('should return last version of package via npm API (with local version)', function (done) {
+                du._getLastVersionFromNpm('bse-admin', '2.0.0').then(function (version) {
                     version.match(/\d{1,2}\.\d{1,2}\.\d{1,2}/).should.be.ok;
                     done();
                 });
             });
         });
 
-        /*
         describe('_executeScript', function () {
-
+            it('should execute given command', function (done) {
+                du._executeScript(process.cwd(), 'ls').then(function () {
+                    done();
+                });
+            });
         });
-        */
 
         /*
         describe('_overwriteLocalVersion', function () {
