@@ -2,6 +2,7 @@ var fs = require('fs'),
     path = require('path'),
     should = require('should'),
     mockFs = require('mock-fs'),
+    fsExtra = require('fs-extra'),
     DependencyUpdater = require('../lib/updater');
 
 describe('lib/updater', function () {
@@ -48,7 +49,10 @@ describe('lib/updater', function () {
                     pattern: '0 0 */1 * * *'
                 },
                 logger: {},
-                updateScript: 'npm update bse-admin',
+                appFolders: [
+                    process.cwd()
+                ],
+                updateScript: 'mkdir ./temp/script-result',
                 dependencyName: 'bse-admin'
             };
             du = new DependencyUpdater(o);
@@ -90,15 +94,8 @@ describe('lib/updater', function () {
         });
 
         describe('_getRemoteVersion', function () {
-            it('should return last version of package via npm API (without local version)', function (done) {
+            it('should return last version of package via npm API', function (done) {
                 du._getLastVersionFromNpm('bse-admin').then(function (version) {
-                    version.match(/\d{1,2}\.\d{1,2}\.\d{1,2}/).should.be.ok;
-                    done();
-                });
-            });
-
-            it('should return last version of package via npm API (with local version)', function (done) {
-                du._getLastVersionFromNpm('bse-admin', '2.0.0').then(function (version) {
                     version.match(/\d{1,2}\.\d{1,2}\.\d{1,2}/).should.be.ok;
                     done();
                 });
@@ -113,16 +110,73 @@ describe('lib/updater', function () {
             });
         });
 
-        /*
         describe('_overwriteLocalVersion', function () {
+            var versionFile = './temp/version.txt';
 
+            beforeEach(function () {
+                mockFs({ temp: {} });
+            });
+
+            afterEach(function () {
+                mockFs.restore();
+            });
+
+            it('should successfully overwrite local version', function (done) {
+                du._overwriteLocalVersion(versionFile, '0.0.1')
+                    .then(function () {
+                        return du._getLocalVersion(versionFile);
+                    })
+                    .then(function (version) {
+                        version.should.equal('0.0.1');
+                        done();
+                    });
+            });
+
+            it('should return rejected promise on error', function (done) {
+                du._overwriteLocalVersion().fail(function (error) {
+                    error.should.be.ok;
+                    done();
+                })
+            });
         });
-        */
 
-        /*
         describe('execute', function () {
+            before(function () {
+                fsExtra.removeSync('./temp');
+            });
 
+            after(function () {
+               fsExtra.removeSync('./temp');
+            });
+
+            it('should execute at first time', function (done) {
+                du.execute().then(function () {
+                    fs.existsSync('./temp').should.equal(true);
+                    fs.existsSync('./temp/version.txt').should.equal(true);
+                    fs.readFileSync('./temp/version.txt', { encoding: 'utf-8' })
+                        .match(/\d{1,2}\.\d{1,2}\.\d{1,2}/).should.be.ok;
+                    done();
+                });
+            });
+
+            it('should\'t do nothing if version was not changed', function (done) {
+                du.execute().then(function () {
+                    fs.existsSync('./temp/script-result').should.equal(false);
+                    done();
+                });
+            });
+
+            it('should to execute script if version was changed', function (done) {
+                fs.writeFileSync('./temp/version.txt', '99.99.99', { encoding: 'utf-8' });
+                du.execute().then(function () {
+                    fs.readdirSync('./temp').should.be.instanceOf(Array).and.have.length(2);
+                    fs.readdirSync('./temp')[0].should.equal('script-result');
+                    done();
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            });
         });
-        */
     });
 });
+
