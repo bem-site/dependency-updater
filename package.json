@@ -26,7 +26,6 @@
     "fs-extra": "^0.18.x",
     "inherit": "^2.2.x",
     "lodash": "^3.1.x",
-    "npm": "2.11.x",
     "vow": "~0.4.x"
   },
   "devDependencies": {
