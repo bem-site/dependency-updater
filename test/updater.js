@@ -1,6 +1,7 @@
-var path = require('path'),
+var fs = require('fs'),
+    path = require('path'),
     should = require('should'),
-    // mockFs = require('mock-fs'),
+    mockFs = require('mock-fs'),
     DependencyUpdater = require('../lib/updater');
 
 describe('lib/updater', function () {
@@ -37,31 +38,82 @@ describe('lib/updater', function () {
         });
     });
 
-    /*
     describe('instance methods', function () {
-        describe('_onError', function () {
+        var o,
+            du;
 
+        beforeEach(function () {
+            o = {
+                cron: {
+                    pattern: '0 0 */1 * * *'
+                },
+                logger: {},
+                updateScript: 'npm update bse-admin',
+                dependencyName: 'bse-admin'
+            };
+            du = new DependencyUpdater(o);
+        });
+
+        describe('_onError', function () {
+            it('should throw error', function () {
+                (function () {
+                    return du._onError(new Error('error'));
+                }).should.throw('error');
+            });
         });
 
         describe('_getLocalVersion', function () {
+            var versionFile = './temp/version.txt';
 
+            beforeEach(function () {
+                mockFs({ temp: {} });
+            });
+
+            afterEach(function () {
+                mockFs.restore();
+            });
+
+            it('should return null if version file does not exists', function (done) {
+                du._getLocalVersion(versionFile).then(function (version) {
+                    should(version).equal(null);
+                    done();
+                });
+            });
+
+            it('should return null if version file does not exists', function (done) {
+                fs.writeFileSync(versionFile, '0.0.1', { encoding: 'utf-8' });
+                du._getLocalVersion(versionFile).then(function (version) {
+                    should(version).equal('0.0.1');
+                    done();
+                });
+            });
         });
 
         describe('_getRemoteVersion', function () {
-
+            it('should return valid version of package via npm API', function (done) {
+                du._getLastVersionFromNpm('bse-admin').then(function (version) {
+                    version.match(/\d{1,2}\.\d{1,2}\.\d{1,2}/).should.be.ok;
+                    done();
+                });
+            });
         });
 
+        /*
         describe('_executeScript', function () {
 
         });
+        */
 
+        /*
         describe('_overwriteLocalVersion', function () {
 
         });
+        */
 
+        /*
         describe('execute', function () {
 
         });
+        */
     });
-    */
 });
