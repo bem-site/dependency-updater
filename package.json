@@ -22,7 +22,7 @@
     "bem-site-logger": "^0.0.x",
     "cron-runner": "^0.1.0",
     "forever": "^0.14.x",
-    "fs-extra": "^0.18.x",
+    "fs-extra": "~0.19.x",
     "inherit": "^2.2.x",
     "lodash": "^3.1.x",
     "vow": "~0.4.x"
@@ -31,9 +31,9 @@
     "mocha": "~2.2.x",
     "mocha-lcov-reporter": "0.0.x",
     "mock-fs": "^2.7.x",
-    "should": "~5.2.x",
+    "should": "~6.x",
     "istanbul": "^0.3.x",
-    "jshint": "~2.6.x",
+    "jshint": "~2.8.x",
     "jscs": "^1.11.x"
   },
   "scripts": {
